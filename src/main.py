@@ -149,7 +149,7 @@ def gmail_webhook():
     service  = get_gmail_service()
     results  = service.users().messages().list(
         userId="me",
-        q="from:notificaciones@bancolombia.com.co newer_than:1h",
+        q="from:alertasynotificaciones@an.notificacionesbancolombia.com newer_than:1h",
         maxResults=1
     ).execute()
 
