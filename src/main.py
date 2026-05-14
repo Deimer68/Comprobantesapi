@@ -79,9 +79,9 @@ def get_email_body(service, message_id: str) -> str:
 
 def parse_bancolombia_email(body: str) -> dict | None:
     """Extrae monto, remitente y referencia del correo de Bancolombia."""
-        monto_pattern = r"por \$?([\d.,]+)"
-        remit_pattern = r"transferencia de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) por"
-        ref_pattern   = r"llave\s+(\d+)"
+    monto_pattern = r"por \$?([\d.,]+)"
+    remit_pattern = r"transferencia de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) por"
+    ref_pattern   = r"llave\s+(\d+)"
 
     monto = re.search(monto_pattern, body, re.IGNORECASE)
     remit = re.search(remit_pattern, body, re.IGNORECASE)
