@@ -79,7 +79,7 @@ def get_email_body(service, message_id: str) -> str:
 
 def parse_bancolombia_email(body: str) -> dict | None:
     """Extrae monto, remitente y referencia del correo de Bancolombia."""
-    monto_pattern = r"por \$?([\d.,]+)"
+    monto_pattern = r"(?:por \$\s*|transferencia por \$\s*)([\d.,]+)"
     remit_pattern = r"(?:transferencia de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) por|de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) en tu cuenta)"
     ref_pattern   = r"llave\s+(\S+)"
 
@@ -106,7 +106,7 @@ def send_whatsapp(payment: dict):
         f"✅ *PAGO RECIBIDO*\n"
         f"💰 Monto: ${payment['monto']}\n"
         f"👤 De: {payment['remitente']}\n"
-        f"🕐 Hora: {payment['hora']}\n" 
+        f"🕐 Hora: {payment['hora']}\n" z
         f"📅 Fecha: {payment['fecha']}\n"
         f"📋 Ref: {payment['referencia']}"
     )
