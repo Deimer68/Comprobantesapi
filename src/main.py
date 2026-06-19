@@ -106,7 +106,7 @@ def send_whatsapp(payment: dict):
         f"✅ *PAGO RECIBIDO*\n"
         f"💰 Monto: ${payment['monto']}\n"
         f"👤 De: {payment['remitente']}\n"
-        f"🕐 Hora: {payment['hora']}\n" z
+        f"🕐 Hora: {payment['hora']}\n"
         f"📅 Fecha: {payment['fecha']}\n"
         f"📋 Ref: {payment['referencia']}"
     )
