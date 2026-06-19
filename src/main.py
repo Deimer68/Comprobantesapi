@@ -101,21 +101,26 @@ def parse_bancolombia_email(body: str) -> dict | None:
 
 
 def send_whatsapp(payment: dict):
-    """Envía el mensaje de notificación vía CallMeBot."""
+    monto = payment['monto']
+    remitente = payment['remitente']
+    hora = payment['hora']
+    fecha = payment['fecha']
+    ref = payment['referencia']
+    
     mensaje = (
-        f"✅ *PAGO RECIBIDO*\n"
-        f"💰 Monto: ${payment['monto']}\n"
-        f"👤 De: {payment['remitente']}\n"
-        f"🕐 Hora: {payment['hora']}\n"
-        f"📅 Fecha: {payment['fecha']}\n"
-        f"📋 Ref: {payment['referencia']}"
+        "PAGO RECIBIDO\n"
+        "Monto: $" + monto + "\n"
+        "De: " + remitente + "\n"
+        "Hora: " + hora + "\n"
+        "Fecha: " + fecha + "\n"
+        "Ref: " + ref
     )
 
     url = (
-        f"https://api.callmebot.com/whatsapp.php"
-        f"?phone={CALLMEBOT_PHONE}"
-        f"&text={requests.utils.quote(mensaje)}"
-        f"&apikey={CALLMEBOT_APIKEY}"
+        "https://api.callmebot.com/whatsapp.php"
+        "?phone=" + CALLMEBOT_PHONE +
+        "&text=" + requests.utils.quote(mensaje) +
+        "&apikey=" + CALLMEBOT_APIKEY
     )
 
     resp = requests.get(url, timeout=10)
