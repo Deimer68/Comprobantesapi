@@ -105,7 +105,7 @@ def send_whatsapp(payment: dict):
         f"✅ *PAGO RECIBIDO*\n"
         f"💰 Monto: ${payment['monto']}\n"
         f"👤 De: {payment['remitente']}\n"
-        f"🕐 Hora: {payment['hora']}\n"
+        f"🕐 Hora: {payment['hora']}\n" 
         f"📅 Fecha: {payment['fecha']}\n"
         f"📋 Ref: {payment['referencia']}"
     )
@@ -123,6 +123,8 @@ def send_whatsapp(payment: dict):
 
 
 # ─── WEBHOOK ────────────────────────────────────────────────────────────────
+
+processed_messages = set()
 
 @app.route("/webhook/gmail", methods=["POST"])
 def gmail_webhook():
@@ -158,16 +160,22 @@ def gmail_webhook():
         print("[Webhook] No se encontró correo de Bancolombia reciente")
         return jsonify({"status": "no_payment_email"}), 200
 
-    # 4. Parsear el correo
+    # 4. Verificar si ya fue procesado
     message_id = messages[0]["id"]
-    body       = get_email_body(service, message_id)
-    payment    = parse_bancolombia_email(body)
+    if message_id in processed_messages:
+        print(f"[Webhook] Mensaje {message_id} ya procesado, ignorando")
+        return jsonify({"status": "already_processed"}), 200
+
+    # 5. Parsear el correo
+    body    = get_email_body(service, message_id)
+    payment = parse_bancolombia_email(body)
 
     if not payment:
         print("[Webhook] Correo encontrado pero no es de pago")
         return jsonify({"status": "not_payment"}), 200
 
-    # 5. Enviar WhatsApp
+    # 6. Marcar como procesado y notificar
+    processed_messages.add(message_id)
     print(f"[Webhook] Pago detectado: ${payment['monto']} de {payment['remitente']}")
     sent = send_whatsapp(payment)
 
