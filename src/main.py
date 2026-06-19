@@ -80,8 +80,8 @@ def get_email_body(service, message_id: str) -> str:
 def parse_bancolombia_email(body: str) -> dict | None:
     """Extrae monto, remitente y referencia del correo de Bancolombia."""
     monto_pattern = r"por \$?([\d.,]+)"
-    remit_pattern = r"transferencia de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) por"
-    ref_pattern   = r"llave\s+(\d+)"
+    remit_pattern = r"(?:transferencia de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) por|de ([A-Za-záéíóúÁÉÍÓÚñÑ\s]+) en tu cuenta)"
+    ref_pattern   = r"llave\s+(\S+)"
 
     monto = re.search(monto_pattern, body, re.IGNORECASE)
     remit = re.search(remit_pattern, body, re.IGNORECASE)
@@ -90,9 +90,10 @@ def parse_bancolombia_email(body: str) -> dict | None:
     if not monto:
         return None
 
+    remitente_match = remit.group(1) or remit.group(2) if remit else None
     return {
         "monto":      monto.group(1).strip() if monto else "No encontrado",
-        "remitente":  remit.group(1).strip() if remit else "No encontrado",
+        "remitente":  remitente_match.strip() if remitente_match else "No encontrado",
         "referencia": ref.group(1).strip()   if ref   else "No encontrado",
         "hora":       datetime.now(tz=__import__('zoneinfo').ZoneInfo('America/Bogota')).strftime("%I:%M %p"),
         "fecha":      datetime.now(tz=__import__('zoneinfo').ZoneInfo('America/Bogota')).strftime("%d/%m/%Y"),
