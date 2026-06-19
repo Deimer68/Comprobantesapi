@@ -94,8 +94,8 @@ def parse_bancolombia_email(body: str) -> dict | None:
         "monto":      monto.group(1).strip() if monto else "No encontrado",
         "remitente":  remit.group(1).strip() if remit else "No encontrado",
         "referencia": ref.group(1).strip()   if ref   else "No encontrado",
-        "hora":       datetime.now().strftime("%I:%M %p"),
-        "fecha":      datetime.now().strftime("%d/%m/%Y"),
+        "hora":       datetime.now(tz=__import__('zoneinfo').ZoneInfo('America/Bogota')).strftime("%I:%M %p"),
+        "fecha":      datetime.now(tz=__import__('zoneinfo').ZoneInfo('America/Bogota')).strftime("%d/%m/%Y"),
     }
 
 
