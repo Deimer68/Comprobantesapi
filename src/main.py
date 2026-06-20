@@ -109,7 +109,7 @@ def send_whatsapp(payment: dict):
     
     mensaje = (
         "PAGO RECIBIDO\n"
-        "Monto: $" + monto + "\n"
+        "Monto: " + monto + " COP\n"
         "De: " + remitente + "\n"
         "Hora: " + hora + "\n"
         "Fecha: " + fecha + "\n"
